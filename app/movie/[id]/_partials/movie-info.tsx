@@ -1,10 +1,19 @@
-import Image from "next/image";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getProfileUrl } from "@/lib/tmdb/image";
 import type { MovieDetail, MovieCredits } from "@/lib/tmdb/mapper";
 
 interface MovieInfoProps {
   movie: MovieDetail;
   credits: MovieCredits;
+}
+
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 }
 
 export function MovieInfo({ movie, credits }: MovieInfoProps) {
@@ -34,15 +43,15 @@ export function MovieInfo({ movie, credits }: MovieInfoProps) {
                     key={person.id}
                     className="nb-card flex items-center gap-3 bg-card p-3"
                   >
-                    <div className="relative size-12 shrink-0 overflow-hidden rounded-full border-[2.5px] border-[var(--nb-shadow)] bg-muted nb-shadow-sm">
-                      <Image
+                    <Avatar className="nb-shadow-sm size-12 shrink-0 border-[2.5px] border-[var(--nb-shadow)]">
+                      <AvatarImage
                         src={getProfileUrl(person.profilePath, "w185")}
                         alt={person.name}
-                        fill
-                        className="object-cover"
-                        sizes="48px"
                       />
-                    </div>
+                      <AvatarFallback className="bg-muted text-xs font-black">
+                        {getInitials(person.name)}
+                      </AvatarFallback>
+                    </Avatar>
                     <div className="min-w-0">
                       <p className="truncate text-sm font-black">
                         {person.name}

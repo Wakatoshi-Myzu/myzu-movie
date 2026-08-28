@@ -54,7 +54,7 @@ export function MovieHero({ movie }: MovieHeroProps) {
                   {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m
                 </span>
               )}
-              <span className="nb-badge bg-yellow-400 px-2.5 py-1 text-xs font-black text-black">
+              <span className="nb-badge nb-on-yellow bg-yellow-400 px-2.5 py-1 text-xs font-black text-black">
                 ★ {movie.voteAverage.toFixed(1)}
               </span>
             </div>

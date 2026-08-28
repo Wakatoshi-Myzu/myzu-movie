@@ -22,7 +22,7 @@ export function HeroContent({ movie }: HeroContentProps) {
             {year}
           </span>
         )}
-        <span className="nb-badge bg-yellow-400 px-2 py-0.5 text-xs font-black text-black">
+        <span className="nb-badge nb-on-yellow bg-yellow-400 px-2 py-0.5 text-xs font-black text-black">
           ★ {movie.voteAverage.toFixed(1)}
         </span>
       </div>

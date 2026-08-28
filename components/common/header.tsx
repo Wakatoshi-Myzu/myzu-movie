@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "@iconify/react";
-import { ThemeToggle } from "@/components/common/theme-toggle";
+// import { ThemeToggle } from "@/components/common/theme-toggle";
 import { BackButton } from "@/app/movie/[id]/_components/back-button";
 
 export function Header() {
@@ -37,7 +37,7 @@ export function Header() {
           >
             HOME
           </Link>
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
         </nav>
       </div>
     </header>

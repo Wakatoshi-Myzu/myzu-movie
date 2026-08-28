@@ -12,7 +12,7 @@ export function MovieRating({ rating, className }: MovieRatingProps) {
   return (
     <div
       className={cn(
-        "nb-badge inline-flex items-center gap-1 bg-yellow-400 px-2 py-0.5 text-xs font-black text-black",
+        "nb-badge nb-on-yellow inline-flex items-center gap-1 bg-yellow-400 px-2 py-0.5 text-xs font-black text-black",
         className
       )}
     >

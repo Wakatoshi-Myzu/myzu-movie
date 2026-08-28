@@ -29,7 +29,7 @@ export function MovieCard({ movie, index = 0 }: MovieCardProps) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         {/* Rating badge */}
-        <div className="absolute top-2 right-2 nb-badge bg-yellow-400 px-2 py-0.5 text-xs text-black">
+        <div className="absolute top-2 right-2 nb-badge nb-on-yellow bg-yellow-400 px-2 py-0.5 text-xs text-black">
           ★ {movie.voteAverage.toFixed(1)}
         </div>
       </div>
