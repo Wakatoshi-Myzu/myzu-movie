@@ -59,7 +59,7 @@ export function MovieList({ category }: MovieListProps) {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8 space-y-3">
         <div className="flex items-center gap-3">
-          <div className="nb-shadow-sm flex size-8 items-center justify-center rounded-lg border-[2.5px] border-black bg-primary">
+          <div className="nb-on-primary nb-shadow-sm flex size-8 items-center justify-center rounded-lg border-[2.5px] border-[var(--nb-shadow)] bg-primary">
             <Icon icon={config.icon} className="size-4 text-primary-foreground" />
           </div>
           <h1 className="text-2xl font-black uppercase tracking-tight sm:text-3xl">
@@ -80,7 +80,7 @@ export function MovieList({ category }: MovieListProps) {
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="nb-btn bg-primary px-5 py-2.5 text-sm text-primary-foreground"
+            className="nb-btn nb-on-primary bg-primary px-5 py-2.5 text-sm text-primary-foreground"
           >
             TRY AGAIN
           </button>
@@ -94,7 +94,7 @@ export function MovieList({ category }: MovieListProps) {
               <button
                 onClick={() => setPage(page - 1)}
                 disabled={page <= 1}
-                className="nb-border-sm nb-shadow-sm inline-flex items-center gap-1 rounded-lg bg-background px-4 py-2 text-sm font-black uppercase tracking-wider transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#000000] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_#000000]"
+                className="nb-border-sm nb-shadow-sm inline-flex items-center gap-1 rounded-lg bg-background px-4 py-2 text-sm font-black uppercase tracking-wider transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_var(--nb-shadow)]"
               >
                 <Icon icon="mdi:chevron-left" className="size-4" />
                 PREV
@@ -107,7 +107,7 @@ export function MovieList({ category }: MovieListProps) {
               <button
                 onClick={() => setPage(page + 1)}
                 disabled={page >= data.totalPages}
-                className="nb-border-sm nb-shadow-sm inline-flex items-center gap-1 rounded-lg bg-background px-4 py-2 text-sm font-black uppercase tracking-wider transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#000000] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_#000000]"
+                className="nb-border-sm nb-shadow-sm inline-flex items-center gap-1 rounded-lg bg-background px-4 py-2 text-sm font-black uppercase tracking-wider transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_var(--nb-shadow)]"
               >
                 NEXT
                 <Icon icon="mdi:chevron-right" className="size-4" />

@@ -51,6 +51,7 @@
 }
 
 :root {
+  --nb-shadow: #000000;
   --background: oklch(0.985 0.002 80);
   --foreground: oklch(0.15 0.01 260);
   --card: oklch(0.96 0.005 80);
@@ -88,6 +89,8 @@
 }
 
 .dark {
+  --nb-shadow: oklch(0.7 0.22 155);
+  --nb-shadow-inv: oklch(0.95 0.005 80);
   --background: oklch(0.13 0.02 160);
   --foreground: oklch(0.95 0.005 80);
   --card: oklch(0.17 0.02 160);
@@ -150,45 +153,89 @@
 
 /* --- Neobrutalism Utilities --- */
 .nb-shadow {
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--nb-shadow);
+}
+
+.dark .nb-on-primary .nb-shadow,
+.dark .nb-on-primary.nb-shadow {
+  box-shadow: 4px 4px 0px var(--nb-shadow-inv);
 }
 
 .nb-shadow-lg {
-  box-shadow: 6px 6px 0px #000000;
+  box-shadow: 6px 6px 0px var(--nb-shadow);
+}
+
+.dark .nb-on-primary .nb-shadow-lg,
+.dark .nb-on-primary.nb-shadow-lg {
+  box-shadow: 6px 6px 0px var(--nb-shadow-inv);
 }
 
 .nb-shadow-sm {
-  box-shadow: 3px 3px 0px #000000;
+  box-shadow: 3px 3px 0px var(--nb-shadow);
+}
+
+.dark .nb-on-primary .nb-shadow-sm,
+.dark .nb-on-primary.nb-shadow-sm {
+  box-shadow: 3px 3px 0px var(--nb-shadow-inv);
 }
 
 .nb-shadow-hover {
-  box-shadow: 7px 7px 0px #000000;
+  box-shadow: 7px 7px 0px var(--nb-shadow);
 }
 
 .nb-border {
   border: 3px solid #000000;
 }
 
+.dark .nb-border {
+  border-color: var(--nb-shadow);
+}
+
+.dark .nb-on-primary .nb-border,
+.dark .nb-on-primary.nb-border {
+  border-color: var(--nb-shadow-inv);
+}
+
 .nb-border-sm {
   border: 2px solid #000000;
+}
+
+.dark .nb-border-sm {
+  border-color: var(--nb-shadow);
+}
+
+.dark .nb-on-primary .nb-border-sm,
+.dark .nb-on-primary.nb-border-sm {
+  border-color: var(--nb-shadow-inv);
 }
 
 .nb-card {
   border: 3px solid #000000;
   border-radius: 12px;
-  box-shadow: 5px 5px 0px #000000;
+  box-shadow: 5px 5px 0px var(--nb-shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .nb-card:hover {
   transform: translate(-3px, -3px);
-  box-shadow: 8px 8px 0px #000000;
+  box-shadow: 8px 8px 0px var(--nb-shadow);
+}
+
+.dark .nb-on-primary .nb-card,
+.dark .nb-on-primary.nb-card {
+  border-color: var(--nb-shadow-inv);
+  box-shadow: 5px 5px 0px var(--nb-shadow-inv);
+}
+
+.dark .nb-on-primary .nb-card:hover,
+.dark .nb-on-primary.nb-card:hover {
+  box-shadow: 8px 8px 0px var(--nb-shadow-inv);
 }
 
 .nb-btn {
   border: 3px solid #000000;
   border-radius: 10px;
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--nb-shadow);
   font-weight: 800;
   letter-spacing: 0.5px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -196,26 +243,52 @@
 
 .nb-btn:hover:not(:disabled) {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #000000;
+  box-shadow: 6px 6px 0px var(--nb-shadow);
 }
 
 .nb-btn:active:not(:disabled) {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px #000000;
+  box-shadow: 1px 1px 0px var(--nb-shadow);
+}
+
+.dark .nb-on-primary .nb-btn,
+.dark .nb-on-primary.nb-btn {
+  border-color: var(--nb-shadow-inv);
+  box-shadow: 4px 4px 0px var(--nb-shadow-inv);
+}
+
+.dark .nb-on-primary .nb-btn:hover:not(:disabled),
+.dark .nb-on-primary.nb-btn:hover:not(:disabled) {
+  box-shadow: 6px 6px 0px var(--nb-shadow-inv);
+}
+
+.dark .nb-on-primary .nb-btn:active:not(:disabled),
+.dark .nb-on-primary.nb-btn:active:not(:disabled) {
+  box-shadow: 1px 1px 0px var(--nb-shadow-inv);
 }
 
 .nb-badge {
   border: 2px solid #000000;
   border-radius: 8px;
-  box-shadow: 2px 2px 0px #000000;
+  box-shadow: 2px 2px 0px var(--nb-shadow);
   font-weight: 800;
   letter-spacing: 0.5px;
+}
+
+.dark .nb-badge {
+  border-color: var(--nb-shadow);
+}
+
+.dark .nb-on-primary .nb-badge,
+.dark .nb-on-primary.nb-badge {
+  border-color: var(--nb-shadow-inv);
+  box-shadow: 2px 2px 0px var(--nb-shadow-inv);
 }
 
 .nb-input {
   border: 3px solid #000000;
   border-radius: 10px;
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--nb-shadow);
   font-weight: 700;
   outline: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -223,7 +296,7 @@
 
 .nb-input:focus {
   transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0px #000000;
+  box-shadow: 5px 5px 0px var(--nb-shadow);
 }
 
 /* Card entrance animation */
@@ -237,11 +310,9 @@
   0% {
     opacity: 0;
     transform: translateY(20px) scale(0.95);
-    box-shadow: 0px 0px 0px #000000;
   }
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    box-shadow: 5px 5px 0px #000000;
   }
 }

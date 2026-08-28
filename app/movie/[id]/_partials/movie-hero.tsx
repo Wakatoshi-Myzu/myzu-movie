@@ -37,7 +37,7 @@ export function MovieHero({ movie }: MovieHeroProps) {
 
           <div className="max-w-2xl space-y-4">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="nb-badge bg-primary px-2.5 py-1 text-xs text-primary-foreground">
+              <span className="nb-badge nb-on-primary bg-primary px-2.5 py-1 text-xs text-primary-foreground">
                 {movie.status}
               </span>
               {movie.releaseDate && (

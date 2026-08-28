@@ -14,7 +14,7 @@ export function HeroContent({ movie }: HeroContentProps) {
   return (
     <div className="max-w-2xl space-y-4">
       <div className="flex items-center gap-3 text-sm">
-        <span className="nb-badge bg-primary px-2 py-0.5 text-xs text-primary-foreground">
+        <span className="nb-badge nb-on-primary bg-primary px-2 py-0.5 text-xs text-primary-foreground">
           ★ FEATURED
         </span>
         {year && (
@@ -38,7 +38,7 @@ export function HeroContent({ movie }: HeroContentProps) {
       <div className="flex items-center gap-3 pt-2">
         <Link
           href={`/movie/${movie.id}`}
-          className="nb-btn inline-flex items-center gap-2 bg-primary px-5 py-2.5 text-sm text-primary-foreground"
+          className="nb-btn nb-on-primary inline-flex items-center gap-2 bg-primary px-5 py-2.5 text-sm text-primary-foreground"
         >
           <Icon icon="mdi:information-outline" className="size-4" />
           VIEW DETAILS

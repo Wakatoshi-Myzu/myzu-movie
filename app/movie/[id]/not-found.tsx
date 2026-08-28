@@ -15,7 +15,7 @@ export default function MovieNotFound() {
         </p>
         <Link
           href="/"
-          className="nb-btn mx-auto inline-flex items-center gap-2 bg-primary px-5 py-2.5 text-sm text-primary-foreground"
+          className="nb-btn nb-on-primary mx-auto inline-flex items-center gap-2 bg-primary px-5 py-2.5 text-sm text-primary-foreground"
         >
           <Icon icon="mdi:home" className="size-4" />
           BACK TO HOME

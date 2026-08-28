@@ -15,7 +15,7 @@ export function MovieInfo({ movie, credits }: MovieInfoProps) {
       <div className="grid gap-12 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-8">
           <section>
-            <h2 className="mb-4 inline-block border-b-[3px] border-black text-xl font-black uppercase tracking-tight">
+            <h2 className="mb-4 inline-block border-b-[3px] border-[var(--nb-shadow)] text-xl font-black uppercase tracking-tight">
               Overview
             </h2>
             <p className="leading-relaxed text-muted-foreground">
@@ -25,7 +25,7 @@ export function MovieInfo({ movie, credits }: MovieInfoProps) {
 
           {topCast.length > 0 && (
             <section>
-              <h2 className="mb-4 inline-block border-b-[3px] border-black text-xl font-black uppercase tracking-tight">
+              <h2 className="mb-4 inline-block border-b-[3px] border-[var(--nb-shadow)] text-xl font-black uppercase tracking-tight">
                 Cast
               </h2>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -34,7 +34,7 @@ export function MovieInfo({ movie, credits }: MovieInfoProps) {
                     key={person.id}
                     className="nb-card flex items-center gap-3 bg-card p-3"
                   >
-                    <div className="relative size-12 shrink-0 overflow-hidden rounded-full border-[2.5px] border-black bg-muted nb-shadow-sm">
+                    <div className="relative size-12 shrink-0 overflow-hidden rounded-full border-[2.5px] border-[var(--nb-shadow)] bg-muted nb-shadow-sm">
                       <Image
                         src={getProfileUrl(person.profilePath, "w185")}
                         alt={person.name}
@@ -60,7 +60,7 @@ export function MovieInfo({ movie, credits }: MovieInfoProps) {
 
         <div className="space-y-6">
           <section>
-            <h3 className="mb-3 inline-block border-b-[3px] border-black text-sm font-black uppercase tracking-wider">
+            <h3 className="mb-3 inline-block border-b-[3px] border-[var(--nb-shadow)] text-sm font-black uppercase tracking-wider">
               Details
             </h3>
             <div className="nb-card space-y-3 bg-card p-4 text-sm">
@@ -93,7 +93,7 @@ export function MovieInfo({ movie, credits }: MovieInfoProps) {
 
           {movie.productionCompanies.length > 0 && (
             <section>
-              <h3 className="mb-3 inline-block border-b-[3px] border-black text-sm font-black uppercase tracking-wider">
+              <h3 className="mb-3 inline-block border-b-[3px] border-[var(--nb-shadow)] text-sm font-black uppercase tracking-wider">
                 Production
               </h3>
               <div className="nb-card bg-card p-4">

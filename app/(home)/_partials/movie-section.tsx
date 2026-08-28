@@ -46,7 +46,7 @@ export function MovieSection({ type, title, href }: MovieSectionProps) {
     <section className="space-y-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="nb-shadow-sm flex size-8 items-center justify-center rounded-lg border-[2.5px] border-black bg-primary">
+          <div className="nb-on-primary nb-shadow-sm flex size-8 items-center justify-center rounded-lg border-[2.5px] border-[var(--nb-shadow)] bg-primary">
             <Icon icon={config.icon} className="size-4 text-primary-foreground" />
           </div>
           <h2 className="text-xl font-black uppercase tracking-tight">{title}</h2>
@@ -54,7 +54,7 @@ export function MovieSection({ type, title, href }: MovieSectionProps) {
         {href && (
           <Link
             href={href}
-            className="nb-border-sm nb-shadow-sm inline-flex items-center gap-1 rounded-lg bg-background px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#000000]"
+            className="nb-border-sm nb-shadow-sm inline-flex items-center gap-1 rounded-lg bg-background px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
           >
             VIEW ALL
             <Icon icon="mdi:arrow-right" className="size-4" />
