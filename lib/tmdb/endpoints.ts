@@ -1,0 +1,40 @@
+export const TMDB_ENDPOINTS = {
+  movie: {
+    popular: "/movie/popular",
+    nowPlaying: "/movie/now_playing",
+    upcoming: "/movie/upcoming",
+    topRated: "/movie/top_rated",
+    details: (id: number) => `/movie/${id}`,
+    credits: (id: number) => `/movie/${id}/credits`,
+    videos: (id: number) => `/movie/${id}/videos`,
+    similar: (id: number) => `/movie/${id}/similar`,
+    recommendations: (id: number) => `/movie/${id}/recommendations`,
+    images: (id: number) => `/movie/${id}/images`,
+    watchProviders: (id: number) => `/movie/${id}/watch/providers`,
+  },
+  tv: {
+    popular: "/tv/popular",
+    airingToday: "/tv/airing_today",
+    onTheAir: "/tv/on_the_air",
+    topRated: "/tv/top_rated",
+    details: (id: number) => `/tv/${id}`,
+    credits: (id: number) => `/tv/${id}/credits`,
+    videos: (id: number) => `/tv/${id}/videos`,
+    similar: (id: number) => `/tv/${id}/similar`,
+  },
+  search: {
+    movie: "/search/movie",
+    tv: "/search/tv",
+    multi: "/search/multi",
+  },
+  genres: {
+    movie: "/genre/movie/list",
+    tv: "/genre/tv/list",
+  },
+  trending: {
+    all: (window: "day" | "week") => `/trending/all/${window}`,
+    movie: (window: "day" | "week") => `/trending/movie/${window}`,
+    tv: (window: "day" | "week") => `/trending/tv/${window}`,
+  },
+  configuration: "/configuration",
+} as const;
