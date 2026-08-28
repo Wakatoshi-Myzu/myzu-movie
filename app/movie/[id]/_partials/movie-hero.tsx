@@ -21,9 +21,10 @@ export function MovieHero({ movie }: MovieHeroProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[50vh] max-w-7xl flex-col justify-end px-4 pt-20 pb-12 sm:px-6 sm:pt-24 lg:px-8">
-        <div className="flex items-end gap-6">
-          <div className="hidden w-48 shrink-0 sm:block lg:w-56">
+      <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-12 sm:px-6 sm:pt-24 lg:px-8">
+        <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-end">
+          {/* Poster */}
+          <div className="w-36 shrink-0 sm:w-48 lg:w-56">
             <div className="nb-card overflow-hidden">
               <Image
                 src={getPosterUrl(movie.posterPath, "w342")}
@@ -35,8 +36,9 @@ export function MovieHero({ movie }: MovieHeroProps) {
             </div>
           </div>
 
-          <div className="max-w-2xl space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
+          {/* Info */}
+          <div className="max-w-2xl space-y-4 text-center sm:text-left">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
               <span className="nb-badge nb-on-primary bg-primary px-2.5 py-1 text-xs text-primary-foreground">
                 {movie.status}
               </span>
@@ -69,7 +71,7 @@ export function MovieHero({ movie }: MovieHeroProps) {
               </p>
             )}
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
               {movie.genres.map((genre) => (
                 <span
                   key={genre.id}
