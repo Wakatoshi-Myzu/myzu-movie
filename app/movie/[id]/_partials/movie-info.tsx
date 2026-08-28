@@ -37,7 +37,7 @@ export function MovieInfo({ movie, credits }: MovieInfoProps) {
               <h2 className="mb-4 inline-block border-b-[3px] border-[var(--nb-shadow)] text-xl font-black uppercase tracking-tight">
                 Cast
               </h2>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {topCast.map((person) => (
                   <div
                     key={person.id}
