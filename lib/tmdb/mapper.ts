@@ -68,6 +68,20 @@ export interface MovieVideos {
   results: VideoResult[];
 }
 
+export interface MovieImage {
+  filePath: string;
+  width: number;
+  height: number;
+  aspectRatio: number;
+  voteAverage: number;
+  voteCount: number;
+}
+
+export interface MovieImages {
+  backdrops: MovieImage[];
+  posters: MovieImage[];
+}
+
 export interface Genre {
   id: number;
   name: string;
@@ -92,6 +106,7 @@ interface TmdbMovieListItem {
   genre_ids: number[];
   popularity: number;
   original_language: string;
+  adult: boolean;
 }
 
 interface TmdbMovieDetail {
@@ -114,6 +129,20 @@ interface TmdbMovieDetail {
   revenue: number;
   production_companies: { id: number; name: string; logo_path: string | null }[];
   spoken_languages: { english_name: string; iso_639_1: string }[];
+}
+
+interface TmdbMovieImage {
+  file_path: string;
+  width: number;
+  height: number;
+  aspect_ratio: number;
+  vote_average: number;
+  vote_count: number;
+}
+
+interface TmdbMovieImages {
+  backdrops: TmdbMovieImage[];
+  posters: TmdbMovieImage[];
 }
 
 interface TmdbCastMember {
@@ -206,6 +235,27 @@ export function mapCrewMember(tmdbCrew: TmdbCrewMember): CrewMember {
   };
 }
 
+export function mapMovieImages(tmdbImages: TmdbMovieImages): MovieImages {
+  return {
+    backdrops: tmdbImages.backdrops.map((img) => ({
+      filePath: img.file_path,
+      width: img.width,
+      height: img.height,
+      aspectRatio: img.aspect_ratio,
+      voteAverage: img.vote_average,
+      voteCount: img.vote_count,
+    })),
+    posters: tmdbImages.posters.map((img) => ({
+      filePath: img.file_path,
+      width: img.width,
+      height: img.height,
+      aspectRatio: img.aspect_ratio,
+      voteAverage: img.vote_average,
+      voteCount: img.vote_count,
+    })),
+  };
+}
+
 export function mapMovieCredits(tmdbCredits: {
   cast: TmdbCastMember[];
   crew: TmdbCrewMember[];
@@ -222,7 +272,7 @@ export function mapPaginatedResponse<T, R>(
 ): PaginatedResponse<R> {
   return {
     page: tmdbResponse.page,
-    results: tmdbResponse.results.map(mapper),
+    results: tmdbResponse.results.filter((item) => !(item as { adult?: boolean }).adult).map(mapper),
     totalPages: tmdbResponse.total_pages,
     totalResults: tmdbResponse.total_results,
   };

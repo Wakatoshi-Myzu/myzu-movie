@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { PaginatedResponse, MovieListItem, MovieDetail } from "@/lib/tmdb/mapper";
+import type { PaginatedResponse, MovieListItem, MovieDetail, MovieImages, MovieVideos } from "@/lib/tmdb/mapper";
 
 const apiClient = axios.create({
   baseURL: "/api",
@@ -64,6 +64,42 @@ export async function fetchTopRatedMovies(
 export async function fetchMovieDetails(id: number): Promise<MovieDetail> {
   const response = await apiClient.get<ApiResponse<MovieDetail>>(
     `/movies/${id}`
+  );
+  return response.data.data;
+}
+
+export async function fetchMovieImages(id: number): Promise<MovieImages> {
+  const response = await apiClient.get<ApiResponse<MovieImages>>(
+    `/movies/${id}/images`
+  );
+  return response.data.data;
+}
+
+export async function fetchMovieVideos(id: number): Promise<MovieVideos> {
+  const response = await apiClient.get<ApiResponse<MovieVideos>>(
+    `/movies/${id}/videos`
+  );
+  return response.data.data;
+}
+
+export async function fetchSimilarMovies(
+  id: number,
+  page = 1
+): Promise<PaginatedResponse<MovieListItem>> {
+  const response = await apiClient.get<ApiResponse<PaginatedResponse<MovieListItem>>>(
+    `/movies/${id}/similar`,
+    { params: { page } }
+  );
+  return response.data.data;
+}
+
+export async function fetchMovieRecommendations(
+  id: number,
+  page = 1
+): Promise<PaginatedResponse<MovieListItem>> {
+  const response = await apiClient.get<ApiResponse<PaginatedResponse<MovieListItem>>>(
+    `/movies/${id}/recommendations`,
+    { params: { page } }
   );
   return response.data.data;
 }

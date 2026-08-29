@@ -3,6 +3,8 @@ import { Header } from "@/components/common/header";
 import { Footer } from "@/components/common/footer";
 import { MovieHero } from "@/app/movie/[id]/_partials/movie-hero";
 import { MovieInfo } from "@/app/movie/[id]/_partials/movie-info";
+import { MovieMedia } from "@/app/movie/[id]/_partials/movie-media";
+import { MovieSimilar } from "@/app/movie/[id]/_partials/movie-similar";
 import { getMovieDetails, getMovieCredits } from "@/lib/tmdb/server";
 
 interface MoviePageProps {
@@ -52,6 +54,10 @@ export default async function MoviePage({ params }: MoviePageProps) {
       <main className="flex-1">
         <MovieHero movie={movie} />
         <MovieInfo movie={movie} credits={credits} />
+        <div className="mx-auto max-w-7xl space-y-12 px-4 pb-12 sm:px-6 lg:px-8">
+          <MovieMedia movieId={movie.id} />
+          <MovieSimilar movieId={movie.id} />
+        </div>
       </main>
       <Footer />
     </>

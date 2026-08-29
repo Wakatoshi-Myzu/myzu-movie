@@ -4,10 +4,12 @@ import {
   mapMovieListItem,
   mapMovieDetail,
   mapMovieCredits,
+  mapMovieImages,
   mapPaginatedResponse,
   type MovieListItem,
   type MovieDetail,
   type MovieCredits,
+  type MovieImages,
   type PaginatedResponse,
   type Genre,
   type MovieVideos,
@@ -18,7 +20,7 @@ export async function getPopularMovies(
   language = "en-US"
 ): Promise<PaginatedResponse<MovieListItem>> {
   const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.popular, {
-    params: { page, language },
+    params: { page, language, include_adult: false },
   });
   return mapPaginatedResponse(response.data, mapMovieListItem);
 }
@@ -28,7 +30,7 @@ export async function getNowPlayingMovies(
   language = "en-US"
 ): Promise<PaginatedResponse<MovieListItem>> {
   const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.nowPlaying, {
-    params: { page, language },
+    params: { page, language, include_adult: false },
   });
   return mapPaginatedResponse(response.data, mapMovieListItem);
 }
@@ -38,7 +40,7 @@ export async function getUpcomingMovies(
   language = "en-US"
 ): Promise<PaginatedResponse<MovieListItem>> {
   const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.upcoming, {
-    params: { page, language },
+    params: { page, language, include_adult: false },
   });
   return mapPaginatedResponse(response.data, mapMovieListItem);
 }
@@ -48,7 +50,7 @@ export async function getTopRatedMovies(
   language = "en-US"
 ): Promise<PaginatedResponse<MovieListItem>> {
   const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.topRated, {
-    params: { page, language },
+    params: { page, language, include_adult: false },
   });
   return mapPaginatedResponse(response.data, mapMovieListItem);
 }
@@ -61,6 +63,16 @@ export async function getMovieDetails(
     params: { language },
   });
   return mapMovieDetail(response.data);
+}
+
+export async function getMovieImages(
+  id: number,
+  language = "en-US"
+): Promise<MovieImages> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.images(id), {
+    params: { language },
+  });
+  return mapMovieImages(response.data);
 }
 
 export async function getMovieCredits(
@@ -89,7 +101,18 @@ export async function getSimilarMovies(
   language = "en-US"
 ): Promise<PaginatedResponse<MovieListItem>> {
   const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.similar(id), {
-    params: { page, language },
+    params: { page, language, include_adult: false },
+  });
+  return mapPaginatedResponse(response.data, mapMovieListItem);
+}
+
+export async function getMovieRecommendations(
+  id: number,
+  page = 1,
+  language = "en-US"
+): Promise<PaginatedResponse<MovieListItem>> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.recommendations(id), {
+    params: { page, language, include_adult: false },
   });
   return mapPaginatedResponse(response.data, mapMovieListItem);
 }
@@ -109,7 +132,7 @@ export async function searchMovies(
   language = "en-US"
 ): Promise<PaginatedResponse<MovieListItem>> {
   const response = await tmdbClient.get(TMDB_ENDPOINTS.search.movie, {
-    params: { query, page, language },
+    params: { query, page, language, include_adult: false },
   });
   return mapPaginatedResponse(response.data, mapMovieListItem);
 }
