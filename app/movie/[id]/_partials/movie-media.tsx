@@ -31,16 +31,22 @@ export function MovieMedia({ movieId }: MovieMediaProps) {
   const images = imagesQuery.data;
   const videos = videosQuery.data;
 
-  const trailers = videos?.results.filter(
-    (v) => v.type === "Trailer" && v.site === "YouTube"
-  ) || [];
-  const teasers = videos?.results.filter(
-    (v) => v.type === "Teaser" && v.site === "YouTube"
-  ) || [];
+  const trailers =
+    videos?.results.filter(
+      (v) => v.type === "Trailer" && v.site === "YouTube",
+    ) || [];
+  const teasers =
+    videos?.results.filter(
+      (v) => v.type === "Teaser" && v.site === "YouTube",
+    ) || [];
   const allVideos = [...trailers, ...teasers];
 
   const tabs: { key: MediaTab; label: string; count: number }[] = [
-    { key: "backdrops", label: "Backdrops", count: images?.backdrops.length || 0 },
+    {
+      key: "backdrops",
+      label: "Backdrops",
+      count: images?.backdrops.length || 0,
+    },
     { key: "posters", label: "Posters", count: images?.posters.length || 0 },
     { key: "videos", label: "Videos", count: allVideos.length },
   ];
@@ -73,7 +79,6 @@ export function MovieMedia({ movieId }: MovieMediaProps) {
         Media
       </h2>
 
-      {/* Tabs */}
       <div className="mb-6 flex flex-wrap gap-2">
         {tabs.map((tab) =>
           tab.count > 0 ? (
@@ -101,18 +106,21 @@ export function MovieMedia({ movieId }: MovieMediaProps) {
                 {tab.count}
               </span>
             </button>
-          ) : null
+          ) : null,
         )}
       </div>
 
-      {/* Backdrops */}
       {activeTab === "backdrops" && images?.backdrops && (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {images.backdrops.slice(0, 12).map((img, index) => (
             <button
               key={index}
               onClick={() =>
-                setSelectedMedia({ type: "backdrop", filePath: img.filePath, index })
+                setSelectedMedia({
+                  type: "backdrop",
+                  filePath: img.filePath,
+                  index,
+                })
               }
               className="nb-card group relative cursor-pointer overflow-hidden bg-card transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--nb-shadow)]"
             >
@@ -136,14 +144,17 @@ export function MovieMedia({ movieId }: MovieMediaProps) {
         </div>
       )}
 
-      {/* Posters */}
       {activeTab === "posters" && images?.posters && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {images.posters.slice(0, 15).map((img, index) => (
             <button
               key={index}
               onClick={() =>
-                setSelectedMedia({ type: "poster", filePath: img.filePath, index })
+                setSelectedMedia({
+                  type: "poster",
+                  filePath: img.filePath,
+                  index,
+                })
               }
               className="nb-card group relative cursor-pointer overflow-hidden bg-card transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--nb-shadow)]"
             >
@@ -167,14 +178,17 @@ export function MovieMedia({ movieId }: MovieMediaProps) {
         </div>
       )}
 
-      {/* Videos */}
       {activeTab === "videos" && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {allVideos.map((video) => (
             <button
               key={video.id}
               onClick={() =>
-                setSelectedMedia({ type: "video", key: video.key, name: video.name })
+                setSelectedMedia({
+                  type: "video",
+                  key: video.key,
+                  name: video.name,
+                })
               }
               className="nb-card group overflow-hidden bg-card text-left transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--nb-shadow)]"
             >
@@ -188,7 +202,10 @@ export function MovieMedia({ movieId }: MovieMediaProps) {
                 />
                 <div className="absolute inset-0 flex items-center justify-center bg-muted/50 transition-colors group-hover:bg-muted/70">
                   <div className="nb-on-primary nb-shadow-sm flex size-14 items-center justify-center rounded-full border-[3px] border-[var(--nb-shadow)] bg-primary transition-transform group-hover:scale-110">
-                    <Icon icon="mdi:play" className="size-7 text-primary-foreground" />
+                    <Icon
+                      icon="mdi:play"
+                      className="size-7 text-primary-foreground"
+                    />
                   </div>
                 </div>
               </div>
@@ -212,7 +229,6 @@ export function MovieMedia({ movieId }: MovieMediaProps) {
         </div>
       )}
 
-      {/* Responsive Modal for Images */}
       <ResponsiveModal
         open={selectedMedia !== null && selectedMedia.type !== "video"}
         onOpenChange={(open) => {
@@ -248,7 +264,6 @@ export function MovieMedia({ movieId }: MovieMediaProps) {
         )}
       </ResponsiveModal>
 
-      {/* Responsive Modal for Videos */}
       <ResponsiveModal
         open={selectedMedia !== null && selectedMedia.type === "video"}
         onOpenChange={(open) => {
@@ -275,7 +290,5 @@ export function MovieMedia({ movieId }: MovieMediaProps) {
 }
 
 function ImageSkeleton() {
-  return (
-    <Skeleton className="absolute inset-0 h-full w-full rounded-lg" />
-  );
+  return <Skeleton className="absolute inset-0 h-full w-full rounded-lg" />;
 }

@@ -23,7 +23,6 @@ export function MovieHero({ movie }: MovieHeroProps) {
 
       <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-12 sm:px-6 sm:pt-24 lg:px-8">
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-end">
-          {/* Poster */}
           <div className="w-36 shrink-0 sm:w-48 lg:w-56">
             <div className="nb-card overflow-hidden">
               <Image
@@ -36,7 +35,6 @@ export function MovieHero({ movie }: MovieHeroProps) {
             </div>
           </div>
 
-          {/* Info */}
           <div className="max-w-2xl space-y-4 text-center sm:text-left">
             <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
               <span className="nb-badge nb-on-primary bg-primary px-2.5 py-1 text-xs text-primary-foreground">
