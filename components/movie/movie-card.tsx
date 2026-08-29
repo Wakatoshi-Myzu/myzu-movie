@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Icon } from "@iconify/react";
 import { getPosterUrl } from "@/lib/tmdb/image";
 import type { MovieListItem } from "@/lib/tmdb/mapper";
 
@@ -9,6 +13,7 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ movie, index = 0 }: MovieCardProps) {
+  const [imgError, setImgError] = useState(false);
   const year = movie.releaseDate
     ? new Date(movie.releaseDate).getFullYear()
     : null;
@@ -20,13 +25,23 @@ export function MovieCard({ movie, index = 0 }: MovieCardProps) {
       style={{ "--animation-order": index } as React.CSSProperties}
     >
       <div className="relative aspect-[2/3] overflow-hidden border-b-[3px] border-[var(--nb-shadow)] bg-muted rounded-t-[9px]">
-        <Image
-          src={getPosterUrl(movie.posterPath, "w342")}
-          alt={`${movie.title} poster`}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-110"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-        />
+        {imgError ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+            <Icon icon="mdi:filmstrip" className="size-10 text-muted-foreground/50" />
+            <span className="text-[10px] font-black uppercase text-muted-foreground/50">
+              No Image
+            </span>
+          </div>
+        ) : (
+          <Image
+            src={getPosterUrl(movie.posterPath, "w342")}
+            alt={`${movie.title} poster`}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            onError={() => setImgError(true)}
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
         <div className="absolute top-2 right-2 nb-badge nb-on-yellow bg-yellow-400 px-2 py-0.5 text-xs text-black">

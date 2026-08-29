@@ -1,14 +1,36 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Icon } from "@iconify/react";
 // import { ThemeToggle } from "@/components/common/theme-toggle";
 import { BackButton } from "@/app/movie/[id]/_components/back-button";
 
 export function Header() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const isMovieDetail = /^\/movie\/\d+/.test(pathname);
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("q") || ""
+  );
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const mobileSearchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (mobileSearchOpen && mobileSearchRef.current) {
+      mobileSearchRef.current.focus();
+    }
+  }, [mobileSearchOpen]);
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      setMobileSearchOpen(false);
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  }
 
   return (
     <header className="nb-border sticky top-0 z-50 bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_var(--nb-shadow)]">
@@ -24,13 +46,43 @@ export function Header() {
               <Icon icon="mdi:filmstrip" className="size-5 text-primary-foreground" />
             </div>
             <span className="text-primary">MOVIE</span>
-            <span className="rounded-md border-[2.5px] border-[var(--nb-shadow)] bg-muted px-2 py-0.5 text-xs font-black nb-shadow-sm">
+            <span className="hidden rounded-md border-[2.5px] border-[var(--nb-shadow)] bg-muted px-2 py-0.5 text-xs font-black nb-shadow-sm sm:inline">
               ARCHIVE
             </span>
           </Link>
         )}
 
         <nav className="flex items-center gap-3">
+          {/* Desktop search */}
+          <form onSubmit={handleSearch} className="hidden items-center sm:flex">
+            <div className="nb-border-sm flex items-center rounded-lg bg-background nb-shadow-sm">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search movies..."
+                className="w-48 rounded-l-lg bg-transparent px-3 py-1.5 text-sm font-medium outline-none placeholder:text-muted-foreground lg:w-56"
+              />
+              <button
+                type="submit"
+                className="flex items-center justify-center rounded-r-lg border-l-[2.5px] border-[var(--nb-shadow)] bg-muted px-2.5 py-1.5 transition-colors hover:bg-accent"
+              >
+                <Icon icon="mdi:magnify" className="size-4 text-foreground" />
+              </button>
+            </div>
+          </form>
+
+          {/* Mobile search toggle */}
+          <button
+            onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+            className="nb-border-sm flex size-9 items-center justify-center rounded-lg bg-background nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)] sm:hidden"
+          >
+            <Icon
+              icon={mobileSearchOpen ? "mdi:close" : "mdi:magnify"}
+              className="size-4"
+            />
+          </button>
+
           <Link
             href="/"
             className="nb-border-sm rounded-lg bg-background px-3 py-1.5 text-sm font-black uppercase tracking-wider nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
@@ -40,6 +92,30 @@ export function Header() {
           {/* <ThemeToggle /> */}
         </nav>
       </div>
+
+      {/* Mobile search bar */}
+      {mobileSearchOpen && (
+        <div className="border-t-[3px] border-[var(--nb-shadow)] bg-background px-4 py-3 sm:hidden">
+          <form onSubmit={handleSearch} className="flex items-center gap-2">
+            <div className="nb-border-sm flex flex-1 items-center rounded-lg bg-background nb-shadow-sm">
+              <input
+                ref={mobileSearchRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search movies..."
+                className="flex-1 rounded-l-lg bg-transparent px-3 py-2 text-sm font-medium outline-none placeholder:text-muted-foreground"
+              />
+              <button
+                type="submit"
+                className="flex items-center justify-center rounded-r-lg border-l-[2.5px] border-[var(--nb-shadow)] bg-muted px-3 py-2 transition-colors hover:bg-accent"
+              >
+                <Icon icon="mdi:magnify" className="size-4 text-foreground" />
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </header>
   );
 }
