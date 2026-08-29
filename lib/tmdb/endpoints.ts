@@ -11,6 +11,8 @@ export const TMDB_ENDPOINTS = {
     recommendations: (id: number) => `/movie/${id}/recommendations`,
     images: (id: number) => `/movie/${id}/images`,
     watchProviders: (id: number) => `/movie/${id}/watch/providers`,
+    keywords: (id: number) => `/movie/${id}/keywords`,
+    releaseDates: (id: number) => `/movie/${id}/release_dates`,
   },
   tv: {
     popular: "/tv/popular",
@@ -31,10 +33,18 @@ export const TMDB_ENDPOINTS = {
     movie: "/genre/movie/list",
     tv: "/genre/tv/list",
   },
+  discover: {
+    movie: "/discover/movie",
+  },
   trending: {
     all: (window: "day" | "week") => `/trending/all/${window}`,
     movie: (window: "day" | "week") => `/trending/movie/${window}`,
     tv: (window: "day" | "week") => `/trending/tv/${window}`,
+  },
+  person: {
+    popular: "/person/popular",
+    details: (id: number) => `/person/${id}`,
+    combinedCredits: (id: number) => `/person/${id}/combined_credits`,
   },
   configuration: "/configuration",
 } as const;

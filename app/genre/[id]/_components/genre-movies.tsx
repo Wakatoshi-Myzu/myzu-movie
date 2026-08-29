@@ -1,65 +1,31 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { usePopularMovies } from "@/hooks/use-popular-movies";
-import { useNowPlayingMovies } from "@/hooks/use-now-playing-movies";
-import { useUpcomingMovies } from "@/hooks/use-upcoming-movies";
-import { useTopRatedMovies } from "@/hooks/use-top-rated-movies";
+import { Icon } from "@iconify/react";
+import { useDiscoverMovies } from "@/hooks/use-discover-movies";
 import { MovieGrid } from "@/components/movie/movie-grid";
 import { MovieGridSkeleton } from "@/components/movie/movie-grid-skeleton";
-import { Icon } from "@iconify/react";
-import type { PaginatedResponse, MovieListItem } from "@/lib/tmdb/mapper";
-import { UseQueryResult } from "@tanstack/react-query";
 
-const CATEGORY_CONFIG = {
-  popular: {
-    title: "Popular Movies",
-    subtitle: "Trending and most watched films right now",
-    icon: "mdi:trending-up",
-  },
-  "now-playing": {
-    title: "Now Playing",
-    subtitle: "Currently showing in theaters",
-    icon: "mdi:play-circle",
-  },
-  upcoming: {
-    title: "Upcoming Movies",
-    subtitle: "Films coming soon to theaters",
-    icon: "mdi:calendar-clock",
-  },
-  "top-rated": {
-    title: "Top Rated",
-    subtitle: "Highest rated films of all time",
-    icon: "mdi:star",
-  },
-} as const;
-
-type Category = keyof typeof CATEGORY_CONFIG;
-
-interface MovieListProps {
-  category: Category;
+interface GenreMoviesProps {
+  genreId: number;
+  genreName: string;
 }
 
-export function MovieList({ category }: MovieListProps) {
+export function GenreMovies({ genreId, genreName }: GenreMoviesProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
 
-  const config = CATEGORY_CONFIG[category];
-
-  const queries: Record<Category, UseQueryResult<PaginatedResponse<MovieListItem>>> = {
-    popular: usePopularMovies(page),
-    "now-playing": useNowPlayingMovies(page),
-    upcoming: useUpcomingMovies(page),
-    "top-rated": useTopRatedMovies(page),
-  };
-
-  const { data, isLoading, error } = queries[category];
+  const { data, isLoading, error } = useDiscoverMovies({
+    page,
+    genreIds: String(genreId),
+    sortBy: "popularity.desc",
+  });
 
   function setPage(newPage: number) {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(newPage));
-    router.push(`/movies?${params.toString()}`);
+    router.push(`/genre/${genreId}?${params.toString()}`);
   }
 
   return (
@@ -67,13 +33,15 @@ export function MovieList({ category }: MovieListProps) {
       <div className="mb-8 space-y-3">
         <div className="flex items-center gap-3">
           <div className="nb-on-primary nb-shadow-sm flex size-8 items-center justify-center rounded-lg border-[2.5px] border-[var(--nb-shadow)] bg-primary">
-            <Icon icon={config.icon} className="size-4 text-primary-foreground" />
+            <Icon icon="mdi:tag" className="size-4 text-primary-foreground" />
           </div>
           <h1 className="text-2xl font-black uppercase tracking-tight sm:text-3xl">
-            {config.title}
+            {genreName}
           </h1>
         </div>
-        <p className="text-muted-foreground">{config.subtitle}</p>
+        <p className="text-muted-foreground">
+          Browse {genreName.toLowerCase()} movies
+        </p>
       </div>
 
       {isLoading ? (
@@ -127,7 +95,7 @@ export function MovieList({ category }: MovieListProps) {
           <Icon icon="mdi:movie-open-outline" className="mx-auto mb-4 size-12 text-muted-foreground" />
           <p className="mb-2 text-lg font-black uppercase">No Movies Found</p>
           <p className="text-sm text-muted-foreground">
-            There are no movies in this category right now.
+            There are no movies in this genre right now.
           </p>
         </div>
       )}

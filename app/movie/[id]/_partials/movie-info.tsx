@@ -1,6 +1,12 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
+import { Icon } from "@iconify/react";
 import { getProfileUrl } from "@/lib/tmdb/image";
-import type { MovieDetail, MovieCredits } from "@/lib/tmdb/mapper";
+import type { MovieDetail, MovieCredits, CastMember } from "@/lib/tmdb/mapper";
 
 interface MovieInfoProps {
   movie: MovieDetail;
@@ -16,8 +22,37 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
+function CastCard({ person }: { person: CastMember }) {
+  return (
+    <Link
+      href={`/person/${person.id}`}
+      className="nb-card group flex items-center gap-3 bg-card p-3 transition-all hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
+    >
+      <Avatar className="nb-shadow-sm size-12 shrink-0 border-[2.5px] border-[var(--nb-shadow)]">
+        <AvatarImage
+          src={getProfileUrl(person.profilePath, "w185")}
+          alt={person.name}
+        />
+        <AvatarFallback className="bg-muted text-xs font-black">
+          {getInitials(person.name)}
+        </AvatarFallback>
+      </Avatar>
+      <div className="min-w-0">
+        <p className="truncate text-sm font-black group-hover:text-primary">
+          {person.name}
+        </p>
+        <p className="truncate text-xs text-muted-foreground">
+          {person.character}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
 export function MovieInfo({ movie, credits }: MovieInfoProps) {
+  const [showAllCast, setShowAllCast] = useState(false);
   const topCast = credits.cast.slice(0, 6);
+  const allCast = credits.cast;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -34,33 +69,23 @@ export function MovieInfo({ movie, credits }: MovieInfoProps) {
 
           {topCast.length > 0 && (
             <section>
-              <h2 className="mb-4 inline-block border-b-[3px] border-[var(--nb-shadow)] text-xl font-black uppercase tracking-tight">
-                Cast
-              </h2>
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="inline-block border-b-[3px] border-[var(--nb-shadow)] text-xl font-black uppercase tracking-tight">
+                  Cast
+                </h2>
+                {allCast.length > 6 && (
+                  <button
+                    onClick={() => setShowAllCast(true)}
+                    className="nb-border-sm nb-shadow-sm inline-flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--nb-shadow)]"
+                  >
+                    <Icon icon="mdi:account-group" className="size-4" />
+                    Show All ({allCast.length})
+                  </button>
+                )}
+              </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {topCast.map((person) => (
-                  <div
-                    key={person.id}
-                    className="nb-card flex items-center gap-3 bg-card p-3"
-                  >
-                    <Avatar className="nb-shadow-sm size-12 shrink-0 border-[2.5px] border-[var(--nb-shadow)]">
-                      <AvatarImage
-                        src={getProfileUrl(person.profilePath, "w185")}
-                        alt={person.name}
-                      />
-                      <AvatarFallback className="bg-muted text-xs font-black">
-                        {getInitials(person.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-black">
-                        {person.name}
-                      </p>
-                      <p className="truncate text-xs text-muted-foreground">
-                        {person.character}
-                      </p>
-                    </div>
-                  </div>
+                  <CastCard key={person.id} person={person} />
                 ))}
               </div>
             </section>
@@ -118,6 +143,30 @@ export function MovieInfo({ movie, credits }: MovieInfoProps) {
           )}
         </div>
       </div>
+
+      {/* All Cast Modal */}
+      <ResponsiveModal
+        open={showAllCast}
+        onOpenChange={setShowAllCast}
+        title={`Cast of ${movie.title}`}
+      >
+        <div className="max-h-[70vh] overflow-y-auto p-4">
+          <div className="mb-4 flex items-center gap-2">
+            <Icon icon="mdi:account-group" className="size-5 text-primary" />
+            <h3 className="text-lg font-black uppercase tracking-tight">
+              All Cast
+            </h3>
+            <span className="nb-badge bg-muted px-2 py-0.5 text-xs font-black">
+              {allCast.length}
+            </span>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {allCast.map((person) => (
+              <CastCard key={person.id} person={person} />
+            ))}
+          </div>
+        </div>
+      </ResponsiveModal>
     </div>
   );
 }

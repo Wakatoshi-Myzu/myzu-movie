@@ -1,55 +1,42 @@
 import { Header } from "@/components/common/header";
 import { Footer } from "@/components/common/footer";
-import { MovieList } from "@/app/movies/_components/movie-list";
+import { GenreMovies } from "@/app/genre/[id]/_components/genre-movies";
 import { Suspense } from "react";
 
-const VALID_CATEGORIES = ["popular", "now-playing", "upcoming", "top-rated"] as const;
-
-type ValidCategory = (typeof VALID_CATEGORIES)[number];
-
-interface MoviesPageProps {
-  searchParams: Promise<{ category?: string }>;
+interface GenrePageProps {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string; name?: string }>;
 }
 
-export async function generateMetadata({ searchParams }: MoviesPageProps) {
+export async function generateMetadata({ searchParams }: GenrePageProps) {
   const params = await searchParams;
-  const category = VALID_CATEGORIES.includes(params.category as ValidCategory)
-    ? (params.category as ValidCategory)
-    : "popular";
-
-  const titles: Record<ValidCategory, string> = {
-    popular: "Popular Movies",
-    "now-playing": "Now Playing",
-    upcoming: "Upcoming Movies",
-    "top-rated": "Top Rated",
-  };
+  const genreName = params.name || "Genre";
 
   return {
-    title: `${titles[category]} | Movie Archive`,
-    description: `Browse ${titles[category].toLowerCase()} on Movie Archive.`,
+    title: `${genreName} Movies | Movie Archive`,
+    description: `Browse ${genreName} movies on Movie Archive.`,
   };
 }
 
-export default async function MoviesPage({ searchParams }: MoviesPageProps) {
-  const params = await searchParams;
-  const category = VALID_CATEGORIES.includes(params.category as ValidCategory)
-    ? (params.category as ValidCategory)
-    : "popular";
+export default async function GenrePage({ params, searchParams }: GenrePageProps) {
+  const { id } = await params;
+  const sp = await searchParams;
+  const genreId = Number(id);
+  const genreName = sp.name || "Genre";
 
   return (
     <>
       <Header />
       <main className="flex-1">
-        <Suspense fallback={<MoviesLoadingSkeleton />}>
-          <MovieList category={category} />
-        </Suspense>
+        <Suspense fallback={<GenreLoadingSkeleton />} />
+        <GenreMovies genreId={genreId} genreName={genreName} />
       </main>
       <Footer />
     </>
   );
 }
 
-function MoviesLoadingSkeleton() {
+function GenreLoadingSkeleton() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8 space-y-3">

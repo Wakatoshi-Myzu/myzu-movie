@@ -1,47 +1,29 @@
 import { Header } from "@/components/common/header";
 import { Footer } from "@/components/common/footer";
-import { MovieList } from "@/app/movies/_components/movie-list";
+import { PeopleList } from "@/app/people/_components/people-list";
 import { Suspense } from "react";
 
-const VALID_CATEGORIES = ["popular", "now-playing", "upcoming", "top-rated"] as const;
-
-type ValidCategory = (typeof VALID_CATEGORIES)[number];
-
-interface MoviesPageProps {
-  searchParams: Promise<{ category?: string }>;
+interface PeoplePageProps {
+  searchParams: Promise<{ page?: string }>;
 }
 
-export async function generateMetadata({ searchParams }: MoviesPageProps) {
+export async function generateMetadata({ searchParams }: PeoplePageProps) {
   const params = await searchParams;
-  const category = VALID_CATEGORIES.includes(params.category as ValidCategory)
-    ? (params.category as ValidCategory)
-    : "popular";
-
-  const titles: Record<ValidCategory, string> = {
-    popular: "Popular Movies",
-    "now-playing": "Now Playing",
-    upcoming: "Upcoming Movies",
-    "top-rated": "Top Rated",
-  };
+  const page = Number(params.page) || 1;
 
   return {
-    title: `${titles[category]} | Movie Archive`,
-    description: `Browse ${titles[category].toLowerCase()} on Movie Archive.`,
+    title: `Popular People ${page > 1 ? `- Page ${page}` : ""} | Movie Archive`,
+    description: "Browse popular actors and filmmakers on Movie Archive.",
   };
 }
 
-export default async function MoviesPage({ searchParams }: MoviesPageProps) {
-  const params = await searchParams;
-  const category = VALID_CATEGORIES.includes(params.category as ValidCategory)
-    ? (params.category as ValidCategory)
-    : "popular";
-
+export default async function PeoplePage({ searchParams }: PeoplePageProps) {
   return (
     <>
       <Header />
       <main className="flex-1">
-        <Suspense fallback={<MoviesLoadingSkeleton />}>
-          <MovieList category={category} />
+        <Suspense fallback={<PeopleLoadingSkeleton />}>
+          <PeopleList />
         </Suspense>
       </main>
       <Footer />
@@ -49,7 +31,7 @@ export default async function MoviesPage({ searchParams }: MoviesPageProps) {
   );
 }
 
-function MoviesLoadingSkeleton() {
+function PeopleLoadingSkeleton() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8 space-y-3">

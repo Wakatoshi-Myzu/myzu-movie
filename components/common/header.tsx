@@ -11,7 +11,7 @@ export function Header() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const isMovieDetail = /^\/movie\/\d+/.test(pathname);
+  const isDetailPage = /^\/(movie|person)\/\d+/.test(pathname);
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("q") || ""
   );
@@ -35,7 +35,7 @@ export function Header() {
   return (
     <header className="nb-border sticky top-0 z-50 bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_var(--nb-shadow)]">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {isMovieDetail ? (
+        {isDetailPage ? (
           <BackButton />
         ) : (
           <Link
@@ -88,6 +88,12 @@ export function Header() {
             className="nb-border-sm rounded-lg bg-background px-3 py-1.5 text-sm font-black uppercase tracking-wider nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
           >
             HOME
+          </Link>
+          <Link
+            href="/people"
+            className="nb-border-sm rounded-lg bg-background px-3 py-1.5 text-sm font-black uppercase tracking-wider nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)] hidden sm:inline-flex"
+          >
+            PEOPLE
           </Link>
           {/* <ThemeToggle /> */}
         </nav>

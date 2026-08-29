@@ -94,6 +94,131 @@ export interface PaginatedResponse<T> {
   totalResults: number;
 }
 
+// Watch Providers
+export interface WatchProvider {
+  providerId: number;
+  providerName: string;
+  logoPath: string;
+}
+
+export interface WatchProviderItem {
+  flatrate?: WatchProvider[];
+  rent?: WatchProvider[];
+  buy?: WatchProvider[];
+  free?: WatchProvider[];
+}
+
+export interface MovieWatchProviders {
+  id: number;
+  results: Record<string, WatchProviderItem>;
+}
+
+// Person/People
+export interface PersonListItem {
+  id: number;
+  name: string;
+  popularity: number;
+  profilePath: string | null;
+  knownForDepartment: string;
+}
+
+export interface PersonDetail {
+  id: number;
+  name: string;
+  biography: string;
+  birthday: string | null;
+  deathday: string | null;
+  placeOfBirth: string | null;
+  profilePath: string | null;
+  popularity: number;
+  knownForDepartment: string;
+  alsoKnownAs: string[];
+  homepage: string | null;
+}
+
+export interface PersonCastCredit {
+  id: number;
+  title: string;
+  originalTitle: string;
+  character: string;
+  posterPath: string | null;
+  backdropPath: string | null;
+  releaseDate: string;
+  voteAverage: number;
+  overview: string;
+  genreIds: number[];
+  mediaType: string;
+  popularity: number;
+}
+
+export interface PersonCrewCredit {
+  id: number;
+  title: string;
+  originalTitle: string;
+  job: string;
+  department: string;
+  posterPath: string | null;
+  backdropPath: string | null;
+  releaseDate: string;
+  voteAverage: number;
+  overview: string;
+  genreIds: number[];
+  mediaType: string;
+  popularity: number;
+}
+
+export interface PersonCombinedCredits {
+  id: number;
+  cast: PersonCastCredit[];
+  crew: PersonCrewCredit[];
+}
+
+// Discover
+export interface DiscoverMovieParams {
+  page?: number;
+  language?: string;
+  sortBy?: string;
+  genreIds?: string;
+  primaryReleaseYear?: number;
+  voteAverageGte?: number;
+  voteAverageLte?: number;
+  voteCountGte?: number;
+  withRuntimeGte?: number;
+  withRuntimeLte?: number;
+  year?: number;
+}
+
+// Keywords
+export interface MovieKeyword {
+  id: number;
+  name: string;
+}
+
+export interface MovieKeywords {
+  id: number;
+  keywords: MovieKeyword[];
+}
+
+// Release Dates
+export interface ReleaseDate {
+  certification: string;
+  descriptors: string[];
+  iso6391: string;
+  note: string;
+  releaseDate: string;
+  type: number;
+}
+
+export interface ReleaseDateResult {
+  iso31661: string;
+  releaseDates: ReleaseDate[];
+}
+
+export interface MovieReleaseDates {
+  id: number;
+  results: ReleaseDateResult[];
+}
+
 interface TmdbMovieListItem {
   id: number;
   title: string;
@@ -166,6 +291,78 @@ interface TmdbPaginatedResponse<T> {
   results: T[];
   total_pages: number;
   total_results: number;
+}
+
+interface TmdbWatchProvider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string;
+}
+
+interface TmdbWatchProviderItem {
+  flatrate?: TmdbWatchProvider[];
+  rent?: TmdbWatchProvider[];
+  buy?: TmdbWatchProvider[];
+  free?: TmdbWatchProvider[];
+}
+
+interface TmdbPersonListItem {
+  id: number;
+  name: string;
+  popularity: number;
+  profile_path: string | null;
+  known_for_department: string;
+}
+
+interface TmdbPersonDetail {
+  id: number;
+  name: string;
+  biography: string;
+  birthday: string | null;
+  deathday: string | null;
+  place_of_birth: string | null;
+  profile_path: string | null;
+  popularity: number;
+  known_for_department: string;
+  also_known_as: string[];
+  homepage: string | null;
+}
+
+interface TmdbPersonCastCredit {
+  id: number;
+  title: string;
+  original_title: string;
+  character: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  release_date: string;
+  vote_average: number;
+  overview: string;
+  genre_ids: number[];
+  media_type: string;
+  popularity: number;
+}
+
+interface TmdbPersonCrewCredit {
+  id: number;
+  title: string;
+  original_title: string;
+  job: string;
+  department: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  release_date: string;
+  vote_average: number;
+  overview: string;
+  genre_ids: number[];
+  media_type: string;
+  popularity: number;
+}
+
+interface TmdbPersonCombinedCredits {
+  id: number;
+  cast: TmdbPersonCastCredit[];
+  crew: TmdbPersonCrewCredit[];
 }
 
 export function mapMovieListItem(tmdbMovie: TmdbMovieListItem): MovieListItem {
@@ -275,5 +472,143 @@ export function mapPaginatedResponse<T, R>(
     results: tmdbResponse.results.filter((item) => !(item as { adult?: boolean }).adult).map(mapper),
     totalPages: tmdbResponse.total_pages,
     totalResults: tmdbResponse.total_results,
+  };
+}
+
+export function mapWatchProviders(tmdbData: {
+  id: number;
+  results: Record<string, TmdbWatchProviderItem>;
+}): MovieWatchProviders {
+  const results: Record<string, WatchProviderItem> = {};
+  for (const [region, item] of Object.entries(tmdbData.results)) {
+    results[region] = {
+      flatrate: item.flatrate?.map((p) => ({
+        providerId: p.provider_id,
+        providerName: p.provider_name,
+        logoPath: p.logo_path,
+      })),
+      rent: item.rent?.map((p) => ({
+        providerId: p.provider_id,
+        providerName: p.provider_name,
+        logoPath: p.logo_path,
+      })),
+      buy: item.buy?.map((p) => ({
+        providerId: p.provider_id,
+        providerName: p.provider_name,
+        logoPath: p.logo_path,
+      })),
+      free: item.free?.map((p) => ({
+        providerId: p.provider_id,
+        providerName: p.provider_name,
+        logoPath: p.logo_path,
+      })),
+    };
+  }
+  return { id: tmdbData.id, results };
+}
+
+export function mapPersonListItem(tmdbPerson: TmdbPersonListItem): PersonListItem {
+  return {
+    id: tmdbPerson.id,
+    name: tmdbPerson.name,
+    popularity: tmdbPerson.popularity,
+    profilePath: tmdbPerson.profile_path,
+    knownForDepartment: tmdbPerson.known_for_department,
+  };
+}
+
+export function mapPersonDetail(tmdbPerson: TmdbPersonDetail): PersonDetail {
+  return {
+    id: tmdbPerson.id,
+    name: tmdbPerson.name,
+    biography: tmdbPerson.biography,
+    birthday: tmdbPerson.birthday,
+    deathday: tmdbPerson.deathday,
+    placeOfBirth: tmdbPerson.place_of_birth,
+    profilePath: tmdbPerson.profile_path,
+    popularity: tmdbPerson.popularity,
+    knownForDepartment: tmdbPerson.known_for_department,
+    alsoKnownAs: tmdbPerson.also_known_as,
+    homepage: tmdbPerson.homepage,
+  };
+}
+
+export function mapPersonCastCredit(tmdbCredit: TmdbPersonCastCredit): PersonCastCredit {
+  return {
+    id: tmdbCredit.id,
+    title: tmdbCredit.title,
+    originalTitle: tmdbCredit.original_title,
+    character: tmdbCredit.character,
+    posterPath: tmdbCredit.poster_path,
+    backdropPath: tmdbCredit.backdrop_path,
+    releaseDate: tmdbCredit.release_date,
+    voteAverage: tmdbCredit.vote_average,
+    overview: tmdbCredit.overview,
+    genreIds: tmdbCredit.genre_ids,
+    mediaType: tmdbCredit.media_type,
+    popularity: tmdbCredit.popularity,
+  };
+}
+
+export function mapPersonCrewCredit(tmdbCredit: TmdbPersonCrewCredit): PersonCrewCredit {
+  return {
+    id: tmdbCredit.id,
+    title: tmdbCredit.title,
+    originalTitle: tmdbCredit.original_title,
+    job: tmdbCredit.job,
+    department: tmdbCredit.department,
+    posterPath: tmdbCredit.poster_path,
+    backdropPath: tmdbCredit.backdrop_path,
+    releaseDate: tmdbCredit.release_date,
+    voteAverage: tmdbCredit.vote_average,
+    overview: tmdbCredit.overview,
+    genreIds: tmdbCredit.genre_ids,
+    mediaType: tmdbCredit.media_type,
+    popularity: tmdbCredit.popularity,
+  };
+}
+
+export function mapPersonCombinedCredits(tmdbCredits: TmdbPersonCombinedCredits): PersonCombinedCredits {
+  return {
+    id: tmdbCredits.id,
+    cast: tmdbCredits.cast.map(mapPersonCastCredit),
+    crew: tmdbCredits.crew.map(mapPersonCrewCredit),
+  };
+}
+
+export function mapMovieKeywords(tmdbData: { id: number; keywords: { id: number; name: string }[] }): MovieKeywords {
+  return {
+    id: tmdbData.id,
+    keywords: tmdbData.keywords.map((k) => ({ id: k.id, name: k.name })),
+  };
+}
+
+export function mapMovieReleaseDates(tmdbData: {
+  id: number;
+  results: {
+    iso_3166_1: string;
+    release_dates: {
+      certification: string;
+      descriptors: string[];
+      iso_639_1: string;
+      note: string;
+      release_date: string;
+      type: number;
+    }[];
+  }[];
+}): MovieReleaseDates {
+  return {
+    id: tmdbData.id,
+    results: tmdbData.results.map((r) => ({
+      iso31661: r.iso_3166_1,
+      releaseDates: r.release_dates.map((rd) => ({
+        certification: rd.certification,
+        descriptors: rd.descriptors,
+        iso6391: rd.iso_639_1,
+        note: rd.note,
+        releaseDate: rd.release_date,
+        type: rd.type,
+      })),
+    })),
   };
 }

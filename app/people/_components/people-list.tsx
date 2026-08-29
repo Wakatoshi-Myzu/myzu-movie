@@ -1,65 +1,24 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { usePopularMovies } from "@/hooks/use-popular-movies";
-import { useNowPlayingMovies } from "@/hooks/use-now-playing-movies";
-import { useUpcomingMovies } from "@/hooks/use-upcoming-movies";
-import { useTopRatedMovies } from "@/hooks/use-top-rated-movies";
-import { MovieGrid } from "@/components/movie/movie-grid";
-import { MovieGridSkeleton } from "@/components/movie/movie-grid-skeleton";
+import Link from "next/link";
+import Image from "next/image";
 import { Icon } from "@iconify/react";
-import type { PaginatedResponse, MovieListItem } from "@/lib/tmdb/mapper";
-import { UseQueryResult } from "@tanstack/react-query";
+import { usePopularPeople } from "@/hooks/use-popular-people";
+import { getProfileUrl } from "@/lib/tmdb/image";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const CATEGORY_CONFIG = {
-  popular: {
-    title: "Popular Movies",
-    subtitle: "Trending and most watched films right now",
-    icon: "mdi:trending-up",
-  },
-  "now-playing": {
-    title: "Now Playing",
-    subtitle: "Currently showing in theaters",
-    icon: "mdi:play-circle",
-  },
-  upcoming: {
-    title: "Upcoming Movies",
-    subtitle: "Films coming soon to theaters",
-    icon: "mdi:calendar-clock",
-  },
-  "top-rated": {
-    title: "Top Rated",
-    subtitle: "Highest rated films of all time",
-    icon: "mdi:star",
-  },
-} as const;
-
-type Category = keyof typeof CATEGORY_CONFIG;
-
-interface MovieListProps {
-  category: Category;
-}
-
-export function MovieList({ category }: MovieListProps) {
+export function PeopleList() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
 
-  const config = CATEGORY_CONFIG[category];
-
-  const queries: Record<Category, UseQueryResult<PaginatedResponse<MovieListItem>>> = {
-    popular: usePopularMovies(page),
-    "now-playing": useNowPlayingMovies(page),
-    upcoming: useUpcomingMovies(page),
-    "top-rated": useTopRatedMovies(page),
-  };
-
-  const { data, isLoading, error } = queries[category];
+  const { data, isLoading, error } = usePopularPeople(page);
 
   function setPage(newPage: number) {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(newPage));
-    router.push(`/movies?${params.toString()}`);
+    router.push(`/people?${params.toString()}`);
   }
 
   return (
@@ -67,21 +26,33 @@ export function MovieList({ category }: MovieListProps) {
       <div className="mb-8 space-y-3">
         <div className="flex items-center gap-3">
           <div className="nb-on-primary nb-shadow-sm flex size-8 items-center justify-center rounded-lg border-[2.5px] border-[var(--nb-shadow)] bg-primary">
-            <Icon icon={config.icon} className="size-4 text-primary-foreground" />
+            <Icon icon="mdi:account-group" className="size-4 text-primary-foreground" />
           </div>
           <h1 className="text-2xl font-black uppercase tracking-tight sm:text-3xl">
-            {config.title}
+            Popular People
           </h1>
         </div>
-        <p className="text-muted-foreground">{config.subtitle}</p>
+        <p className="text-muted-foreground">
+          Trending actors and filmmakers right now
+        </p>
       </div>
 
       {isLoading ? (
-        <MovieGridSkeleton count={18} />
+        <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          {Array.from({ length: 18 }).map((_, i) => (
+            <div key={i} className="nb-card overflow-hidden bg-card">
+              <div className="aspect-[2/3] w-full animate-pulse border-b-[3px] border-[var(--nb-shadow)] bg-muted" />
+              <div className="p-3 space-y-2">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : error ? (
         <div className="nb-card mx-auto max-w-md bg-card p-8 text-center">
           <Icon icon="mdi:alert-circle-outline" className="mx-auto mb-4 size-12 text-destructive" />
-          <p className="mb-2 text-lg font-black uppercase">Failed to Load Movies</p>
+          <p className="mb-2 text-lg font-black uppercase">Failed to Load</p>
           <p className="mb-4 text-sm text-muted-foreground">
             Something went wrong. Please try again later.
           </p>
@@ -94,7 +65,32 @@ export function MovieList({ category }: MovieListProps) {
         </div>
       ) : data && data.results.length > 0 ? (
         <>
-          <MovieGrid movies={data.results} />
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+            {data.results.map((person) => (
+              <Link
+                key={person.id}
+                href={`/person/${person.id}`}
+                className="nb-card group overflow-hidden bg-card transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_var(--nb-shadow)]"
+              >
+                <div className="relative aspect-[2/3] w-full border-b-[3px] border-[var(--nb-shadow)]">
+                  <Image
+                    src={getProfileUrl(person.profilePath, "w342")}
+                    alt={person.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                </div>
+                <div className="p-3">
+                  <p className="truncate text-sm font-black">{person.name}</p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                    {person.knownForDepartment}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
 
           {data.totalPages > 1 && (
             <div className="mt-10 flex items-center justify-center gap-3">
@@ -124,10 +120,10 @@ export function MovieList({ category }: MovieListProps) {
         </>
       ) : (
         <div className="nb-card mx-auto max-w-md bg-card p-8 text-center">
-          <Icon icon="mdi:movie-open-outline" className="mx-auto mb-4 size-12 text-muted-foreground" />
-          <p className="mb-2 text-lg font-black uppercase">No Movies Found</p>
+          <Icon icon="mdi:account-outline" className="mx-auto mb-4 size-12 text-muted-foreground" />
+          <p className="mb-2 text-lg font-black uppercase">No People Found</p>
           <p className="text-sm text-muted-foreground">
-            There are no movies in this category right now.
+            No popular people available right now.
           </p>
         </div>
       )}

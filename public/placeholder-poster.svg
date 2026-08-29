@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="342" height="513" viewBox="0 0 342 513" fill="none">
+  <rect width="342" height="513" fill="#1a1a2e"/>
+  <rect x="1" y="1" width="340" height="511" rx="3" stroke="#2d2d44" stroke-width="2" fill="none"/>
+  <g transform="translate(141, 200)">
+    <path d="M30 0C13.4 0 0 13.4 0 30C0 46.6 13.4 60 30 60H34V70C34 72.2 35.8 74 38 74C40.2 74 42 72.2 42 70V60H46C62.6 60 76 46.6 76 30C76 13.4 62.6 0 46 0H30ZM62 30C62 38.8 54.8 46 46 46H14C5.2 46 -2 38.8 -2 30C-2 21.2 5.2 14 14 14H46C54.8 14 62 21.2 62 30Z" fill="#2d2d44"/>
+  </g>
+  <text x="171" y="310" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="bold" fill="#4a4a6a">NO POSTER</text>
+</svg>
