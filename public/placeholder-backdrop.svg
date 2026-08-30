@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#1a1a2e"/>
+  <rect x="10" y="10" width="1260" height="700" rx="16" fill="none" stroke="#333" stroke-width="4" stroke-dasharray="8 4"/>
+  <text x="640" y="340" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="900" fill="#444" letter-spacing="4">NO BACKDROP</text>
+  <text x="640" y="390" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#555" letter-spacing="2">🎬</text>
+</svg>

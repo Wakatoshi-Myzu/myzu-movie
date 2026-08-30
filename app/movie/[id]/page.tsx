@@ -6,6 +6,9 @@ import { MovieInfo } from "@/app/movie/[id]/_partials/movie-info";
 import { MovieMedia } from "@/app/movie/[id]/_partials/movie-media";
 import { MovieSimilar } from "@/app/movie/[id]/_partials/movie-similar";
 import { MovieWatchProviders } from "@/app/movie/[id]/_partials/movie-watch-providers";
+import { MovieReviews } from "@/app/movie/[id]/_partials/movie-reviews";
+import { MovieExternalIds } from "@/app/movie/[id]/_partials/movie-external-ids";
+import { MovieTranslations } from "@/app/movie/[id]/_partials/movie-translations";
 import { getMovieDetails, getMovieCredits } from "@/lib/tmdb/server";
 
 interface MoviePageProps {
@@ -58,6 +61,9 @@ export default async function MoviePage({ params }: MoviePageProps) {
         <div className="mx-auto max-w-7xl space-y-12 px-4 pb-12 sm:px-6 lg:px-8">
           <MovieWatchProviders movieId={movie.id} />
           <MovieMedia movieId={movie.id} />
+          <MovieReviews movieId={movie.id} />
+          <MovieExternalIds movieId={movie.id} />
+          <MovieTranslations movieId={movie.id} />
           <MovieSimilar movieId={movie.id} />
         </div>
       </main>

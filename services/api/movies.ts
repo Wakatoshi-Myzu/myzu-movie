@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { PaginatedResponse, MovieListItem, MovieDetail, MovieImages, MovieVideos, MovieWatchProviders, MovieKeywords, MovieReleaseDates, PersonListItem, PersonDetail, PersonCombinedCredits } from "@/lib/tmdb/mapper";
+import type { PaginatedResponse, MovieListItem, MovieDetail, MovieImages, MovieVideos, MovieWatchProviders, MovieKeywords, MovieReleaseDates, MovieReviews, MovieExternalIds, MovieTranslations, Collection, PersonListItem, PersonDetail, PersonCombinedCredits, TvSeriesListItem, TvSeriesDetail } from "@/lib/tmdb/mapper";
 
 const apiClient = axios.create({
   baseURL: "/api",
@@ -186,6 +186,98 @@ export async function fetchPersonCombinedCredits(
 ): Promise<PersonCombinedCredits> {
   const response = await apiClient.get<ApiResponse<PersonCombinedCredits>>(
     `/people/${id}/credits`
+  );
+  return response.data.data;
+}
+
+// Movie Reviews
+export async function fetchMovieReviews(
+  id: number,
+  page = 1
+): Promise<MovieReviews> {
+  const response = await apiClient.get<ApiResponse<MovieReviews>>(
+    `/movies/${id}/reviews`,
+    { params: { page } }
+  );
+  return response.data.data;
+}
+
+// Movie External IDs
+export async function fetchMovieExternalIds(
+  id: number
+): Promise<MovieExternalIds> {
+  const response = await apiClient.get<ApiResponse<MovieExternalIds>>(
+    `/movies/${id}/external-ids`
+  );
+  return response.data.data;
+}
+
+// Movie Translations
+export async function fetchMovieTranslations(
+  id: number
+): Promise<MovieTranslations> {
+  const response = await apiClient.get<ApiResponse<MovieTranslations>>(
+    `/movies/${id}/translations`
+  );
+  return response.data.data;
+}
+
+// Collection
+export async function fetchCollectionDetails(
+  id: number
+): Promise<Collection> {
+  const response = await apiClient.get<ApiResponse<Collection>>(
+    `/collections/${id}`
+  );
+  return response.data.data;
+}
+
+// TV Series
+export async function fetchPopularTvSeries(
+  page = 1
+): Promise<PaginatedResponse<TvSeriesListItem>> {
+  const response = await apiClient.get<ApiResponse<PaginatedResponse<TvSeriesListItem>>>(
+    "/tv/popular",
+    { params: { page } }
+  );
+  return response.data.data;
+}
+
+export async function fetchAiringTodayTvSeries(
+  page = 1
+): Promise<PaginatedResponse<TvSeriesListItem>> {
+  const response = await apiClient.get<ApiResponse<PaginatedResponse<TvSeriesListItem>>>(
+    "/tv/airing-today",
+    { params: { page } }
+  );
+  return response.data.data;
+}
+
+export async function fetchOnTheAirTvSeries(
+  page = 1
+): Promise<PaginatedResponse<TvSeriesListItem>> {
+  const response = await apiClient.get<ApiResponse<PaginatedResponse<TvSeriesListItem>>>(
+    "/tv/on-the-air",
+    { params: { page } }
+  );
+  return response.data.data;
+}
+
+export async function fetchTopRatedTvSeries(
+  page = 1
+): Promise<PaginatedResponse<TvSeriesListItem>> {
+  const response = await apiClient.get<ApiResponse<PaginatedResponse<TvSeriesListItem>>>(
+    "/tv/top-rated",
+    { params: { page } }
+  );
+  return response.data.data;
+}
+
+export async function fetchTvSeriesDetails(
+  id: number
+): Promise<TvSeriesDetail> {
+  const response = await apiClient.get<ApiResponse<TvSeriesDetail>>(
+    `/tv/${id}`
   );
   return response.data.data;
 }

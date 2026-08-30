@@ -13,6 +13,26 @@ export const movieKeys = {
   keywords: (id: number) => [...movieKeys.all, "keywords", id] as const,
   releaseDates: (id: number) =>
     [...movieKeys.all, "release-dates", id] as const,
+  reviews: (id: number, page = 1) =>
+    [...movieKeys.all, "reviews", id, page] as const,
+  externalIds: (id: number) =>
+    [...movieKeys.all, "external-ids", id] as const,
+  translations: (id: number) =>
+    [...movieKeys.all, "translations", id] as const,
+};
+
+export const collectionKeys = {
+  all: ["collections"] as const,
+  detail: (id: number) => [...collectionKeys.all, "detail", id] as const,
+};
+
+export const tvKeys = {
+  all: ["tv"] as const,
+  popular: (page = 1) => [...tvKeys.all, "popular", page] as const,
+  airingToday: (page = 1) => [...tvKeys.all, "airing-today", page] as const,
+  onTheAir: (page = 1) => [...tvKeys.all, "on-the-air", page] as const,
+  topRated: (page = 1) => [...tvKeys.all, "top-rated", page] as const,
+  detail: (id: number) => [...tvKeys.all, "detail", id] as const,
 };
 
 export const searchKeys = {

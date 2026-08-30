@@ -9,9 +9,15 @@ import {
   mapWatchProviders,
   mapMovieKeywords,
   mapMovieReleaseDates,
+  mapMovieReviews,
+  mapMovieExternalIds,
+  mapMovieTranslations,
   mapPersonListItem,
   mapPersonDetail,
   mapPersonCombinedCredits,
+  mapTvSeriesListItem,
+  mapTvSeriesDetail,
+  mapCollection,
   type MovieListItem,
   type MovieDetail,
   type MovieCredits,
@@ -22,9 +28,15 @@ import {
   type MovieWatchProviders,
   type MovieKeywords,
   type MovieReleaseDates,
+  type MovieReviews,
+  type MovieExternalIds,
+  type MovieTranslations,
   type PersonListItem,
   type PersonDetail,
   type PersonCombinedCredits,
+  type TvSeriesListItem,
+  type TvSeriesDetail,
+  type Collection,
 } from "@/lib/tmdb/mapper";
 
 export async function getPopularMovies(
@@ -236,4 +248,86 @@ export async function getPersonCombinedCredits(
     params: { language },
   });
   return mapPersonCombinedCredits(response.data);
+}
+
+export async function getMovieReviews(
+  id: number,
+  page = 1,
+  language = "en-US"
+): Promise<MovieReviews> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.reviews(id), {
+    params: { page, language },
+  });
+  return mapMovieReviews(response.data);
+}
+
+export async function getMovieExternalIds(id: number): Promise<MovieExternalIds> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.externalIds(id));
+  return mapMovieExternalIds(response.data);
+}
+
+export async function getMovieTranslations(id: number): Promise<MovieTranslations> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.movie.translations(id));
+  return mapMovieTranslations(response.data);
+}
+
+export async function getCollectionDetails(
+  id: number,
+  language = "en-US"
+): Promise<Collection> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.collection.details(id), {
+    params: { language },
+  });
+  return mapCollection(response.data);
+}
+
+// TV Series
+export async function getPopularTvSeries(
+  page = 1,
+  language = "en-US"
+): Promise<PaginatedResponse<TvSeriesListItem>> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.tv.popular, {
+    params: { page, language },
+  });
+  return mapPaginatedResponse(response.data, mapTvSeriesListItem);
+}
+
+export async function getAiringTodayTvSeries(
+  page = 1,
+  language = "en-US"
+): Promise<PaginatedResponse<TvSeriesListItem>> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.tv.airingToday, {
+    params: { page, language },
+  });
+  return mapPaginatedResponse(response.data, mapTvSeriesListItem);
+}
+
+export async function getOnTheAirTvSeries(
+  page = 1,
+  language = "en-US"
+): Promise<PaginatedResponse<TvSeriesListItem>> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.tv.onTheAir, {
+    params: { page, language },
+  });
+  return mapPaginatedResponse(response.data, mapTvSeriesListItem);
+}
+
+export async function getTopRatedTvSeries(
+  page = 1,
+  language = "en-US"
+): Promise<PaginatedResponse<TvSeriesListItem>> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.tv.topRated, {
+    params: { page, language },
+  });
+  return mapPaginatedResponse(response.data, mapTvSeriesListItem);
+}
+
+export async function getTvSeriesDetails(
+  id: number,
+  language = "en-US"
+): Promise<TvSeriesDetail> {
+  const response = await tmdbClient.get(TMDB_ENDPOINTS.tv.details(id), {
+    params: { language },
+  });
+  return mapTvSeriesDetail(response.data);
 }

@@ -4,17 +4,22 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Icon } from "@iconify/react";
-// import { ThemeToggle } from "@/components/common/theme-toggle";
-import { BackButton } from "@/app/movie/[id]/_components/back-button";
+
+function getBackUrl(pathname: string): string {
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length <= 1) return "/";
+  return "/" + segments.slice(0, -1).join("/");
+}
 
 export function Header() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const isDetailPage = /^\/(movie|person)\/\d+/.test(pathname);
+  const isHomePage = pathname === "/";
   const [searchQuery, setSearchQuery] = useState(
     searchParams.get("q") || ""
   );
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const mobileSearchRef = useRef<HTMLInputElement>(null);
 
@@ -24,19 +29,61 @@ export function Header() {
     }
   }, [mobileSearchOpen]);
 
+  // Close menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setMobileSearchOpen(false);
+  }, [pathname]);
+
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     if (searchQuery.trim()) {
       setMobileSearchOpen(false);
+      setMobileMenuOpen(false);
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   }
 
+  const navLinks = (
+    <>
+      <Link
+        href="/"
+        className="nb-border-sm flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5 text-sm font-black uppercase tracking-wider nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        <Icon icon="mdi:home" className="size-4" />
+        HOME
+      </Link>
+      <Link
+        href="/tv"
+        className="nb-border-sm flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5 text-sm font-black uppercase tracking-wider nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        <Icon icon="mdi:television" className="size-4" />
+        TV
+      </Link>
+      <Link
+        href="/people"
+        className="nb-border-sm flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5 text-sm font-black uppercase tracking-wider nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        <Icon icon="mdi:account-group" className="size-4" />
+        PEOPLE
+      </Link>
+    </>
+  );
+
   return (
     <header className="nb-border sticky top-0 z-50 bg-background/95 backdrop-blur-sm shadow-[0_4px_0px_var(--nb-shadow)]">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {isDetailPage ? (
-          <BackButton />
+        {!isHomePage ? (
+          <Link
+            href={getBackUrl(pathname)}
+            className="nb-border-sm nb-shadow-sm inline-flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
+          >
+            <Icon icon="mdi:arrow-left" className="size-4" />
+            BACK
+          </Link>
         ) : (
           <Link
             href="/"
@@ -52,9 +99,9 @@ export function Header() {
           </Link>
         )}
 
-        <nav className="flex items-center gap-3">
-          {/* Desktop search */}
-          <form onSubmit={handleSearch} className="hidden items-center sm:flex">
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-3 sm:flex">
+          <form onSubmit={handleSearch} className="flex items-center">
             <div className="nb-border-sm flex items-center rounded-lg bg-background nb-shadow-sm">
               <input
                 type="text"
@@ -71,31 +118,35 @@ export function Header() {
               </button>
             </div>
           </form>
+          {navLinks}
+        </nav>
 
-          {/* Mobile search toggle */}
+        {/* Mobile nav */}
+        <nav className="flex items-center gap-2 sm:hidden">
           <button
-            onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
-            className="nb-border-sm flex size-9 items-center justify-center rounded-lg bg-background nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)] sm:hidden"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              setMobileSearchOpen(!mobileSearchOpen);
+            }}
+            className="nb-border-sm flex size-9 items-center justify-center rounded-lg bg-background nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
           >
             <Icon
               icon={mobileSearchOpen ? "mdi:close" : "mdi:magnify"}
               className="size-4"
             />
           </button>
-
-          <Link
-            href="/"
-            className="nb-border-sm rounded-lg bg-background px-3 py-1.5 text-sm font-black uppercase tracking-wider nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
+          <button
+            onClick={() => {
+              setMobileSearchOpen(false);
+              setMobileMenuOpen(!mobileMenuOpen);
+            }}
+            className="nb-border-sm flex size-9 items-center justify-center rounded-lg bg-background nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)]"
           >
-            HOME
-          </Link>
-          <Link
-            href="/people"
-            className="nb-border-sm rounded-lg bg-background px-3 py-1.5 text-sm font-black uppercase tracking-wider nb-shadow-sm transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_var(--nb-shadow)] hidden sm:inline-flex"
-          >
-            PEOPLE
-          </Link>
-          {/* <ThemeToggle /> */}
+            <Icon
+              icon={mobileMenuOpen ? "mdi:close" : "mdi:menu"}
+              className="size-4"
+            />
+          </button>
         </nav>
       </div>
 
@@ -120,6 +171,15 @@ export function Header() {
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="border-t-[3px] border-[var(--nb-shadow)] bg-background px-4 py-4 sm:hidden">
+          <nav className="flex flex-col gap-3">
+            {navLinks}
+          </nav>
         </div>
       )}
     </header>

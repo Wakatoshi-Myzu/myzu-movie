@@ -3,6 +3,7 @@ import { Footer } from "@/components/common/footer";
 import { HeroSection } from "@/app/(home)/_partials/hero-section";
 import { MovieSection } from "@/app/(home)/_partials/movie-section";
 import { TrendingSection } from "@/app/(home)/_components/trending-section";
+import { TvSection } from "@/app/(home)/_components/tv-section";
 
 export default function HomePage() {
   return (
@@ -28,6 +29,7 @@ export default function HomePage() {
             title="Upcoming"
             href="/movies?category=upcoming"
           />
+          <TvSection />
         </div>
       </main>
       <Footer />

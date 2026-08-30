@@ -13,6 +13,9 @@ export const TMDB_ENDPOINTS = {
     watchProviders: (id: number) => `/movie/${id}/watch/providers`,
     keywords: (id: number) => `/movie/${id}/keywords`,
     releaseDates: (id: number) => `/movie/${id}/release_dates`,
+    reviews: (id: number) => `/movie/${id}/reviews`,
+    externalIds: (id: number) => `/movie/${id}/external_ids`,
+    translations: (id: number) => `/movie/${id}/translations`,
   },
   tv: {
     popular: "/tv/popular",
@@ -23,6 +26,10 @@ export const TMDB_ENDPOINTS = {
     credits: (id: number) => `/tv/${id}/credits`,
     videos: (id: number) => `/tv/${id}/videos`,
     similar: (id: number) => `/tv/${id}/similar`,
+    recommendations: (id: number) => `/tv/${id}/recommendations`,
+    watchProviders: (id: number) => `/tv/${id}/watch/providers`,
+    reviews: (id: number) => `/tv/${id}/reviews`,
+    externalIds: (id: number) => `/tv/${id}/external_ids`,
   },
   search: {
     movie: "/search/movie",
@@ -35,6 +42,7 @@ export const TMDB_ENDPOINTS = {
   },
   discover: {
     movie: "/discover/movie",
+    tv: "/discover/tv",
   },
   trending: {
     all: (window: "day" | "week") => `/trending/all/${window}`,
@@ -45,6 +53,9 @@ export const TMDB_ENDPOINTS = {
     popular: "/person/popular",
     details: (id: number) => `/person/${id}`,
     combinedCredits: (id: number) => `/person/${id}/combined_credits`,
+  },
+  collection: {
+    details: (id: number) => `/collection/${id}`,
   },
   configuration: "/configuration",
 } as const;

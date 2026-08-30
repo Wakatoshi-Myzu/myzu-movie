@@ -199,6 +199,128 @@ export interface MovieKeywords {
   keywords: MovieKeyword[];
 }
 
+// Reviews
+export interface ReviewAuthorDetails {
+  name: string;
+  username: string;
+  avatarPath: string | null;
+  rating: number | null;
+}
+
+export interface MovieReview {
+  id: string;
+  author: string;
+  authorDetails: ReviewAuthorDetails;
+  content: string;
+  createdAt: string;
+  url: string;
+}
+
+export interface MovieReviews {
+  id: number;
+  page: number;
+  results: MovieReview[];
+  totalPages: number;
+  totalResults: number;
+}
+
+// External IDs
+export interface MovieExternalIds {
+  id: number;
+  imdbId: string | null;
+  wikidataId: string | null;
+  facebookId: string | null;
+  instagramId: string | null;
+  twitterId: string | null;
+}
+
+// Translations
+export interface Translation {
+  iso6391: string;
+  iso31661: string;
+  name: string;
+  englishName: string;
+}
+
+export interface MovieTranslations {
+  id: number;
+  translations: Translation[];
+}
+
+// Collection
+export interface Collection {
+  id: number;
+  name: string;
+  overview: string;
+  posterPath: string | null;
+  backdropPath: string | null;
+  parts: MovieListItem[];
+}
+
+// TV Series
+export interface TvSeriesListItem {
+  id: number;
+  name: string;
+  overview: string;
+  posterPath: string | null;
+  backdropPath: string | null;
+  firstAirDate: string;
+  voteAverage: number;
+  voteCount: number;
+  genreIds: number[];
+  popularity: number;
+  originalLanguage: string;
+  originCountry: string[];
+}
+
+export interface TvSeriesDetail {
+  id: number;
+  name: string;
+  originalName: string;
+  overview: string;
+  posterPath: string | null;
+  backdropPath: string | null;
+  firstAirDate: string;
+  lastAirDate: string | null;
+  voteAverage: number;
+  voteCount: number;
+  status: string;
+  tagline: string;
+  genres: { id: number; name: string }[];
+  homepage: string | null;
+  numberOfSeasons: number;
+  numberOfEpisodes: number;
+  seasons: TvSeason[];
+  networks: { id: number; name: string; logoPath: string | null }[];
+  createdBy: { id: number; name: string; profilePath: string | null }[];
+  spokenLanguages: { englishName: string; iso6391: string }[];
+  productionCompanies: { id: number; name: string; logoPath: string | null }[];
+}
+
+export interface TvSeason {
+  id: number;
+  name: string;
+  overview: string;
+  seasonNumber: number;
+  episodeCount: number;
+  airDate: string | null;
+  posterPath: string | null;
+  voteAverage: number;
+}
+
+export interface TvEpisode {
+  id: number;
+  name: string;
+  overview: string;
+  episodeNumber: number;
+  seasonNumber: number;
+  airDate: string | null;
+  stillPath: string | null;
+  voteAverage: number;
+  voteCount: number;
+  runtime: number | null;
+}
+
 // Release Dates
 export interface ReleaseDate {
   certification: string;
@@ -609,6 +731,238 @@ export function mapMovieReleaseDates(tmdbData: {
         releaseDate: rd.release_date,
         type: rd.type,
       })),
+    })),
+  };
+}
+
+// Reviews mappers
+interface TmdbReviewAuthorDetails {
+  name: string;
+  username: string;
+  avatar_path: string | null;
+  rating: number | null;
+}
+
+interface TmdbMovieReview {
+  id: string;
+  author: string;
+  author_details: TmdbReviewAuthorDetails;
+  content: string;
+  created_at: string;
+  url: string;
+}
+
+interface TmdbMovieReviews {
+  id: number;
+  page: number;
+  results: TmdbMovieReview[];
+  total_pages: number;
+  total_results: number;
+}
+
+export function mapMovieReviews(tmdbData: TmdbMovieReviews): MovieReviews {
+  return {
+    id: tmdbData.id,
+    page: tmdbData.page,
+    results: tmdbData.results.map((r) => ({
+      id: r.id,
+      author: r.author,
+      authorDetails: {
+        name: r.author_details.name,
+        username: r.author_details.username,
+        avatarPath: r.author_details.avatar_path,
+        rating: r.author_details.rating,
+      },
+      content: r.content,
+      createdAt: r.created_at,
+      url: r.url,
+    })),
+    totalPages: tmdbData.total_pages,
+    totalResults: tmdbData.total_results,
+  };
+}
+
+// External IDs mapper
+interface TmdbMovieExternalIds {
+  id: number;
+  imdb_id: string | null;
+  wikidata_id: string | null;
+  facebook_id: string | null;
+  instagram_id: string | null;
+  twitter_id: string | null;
+}
+
+export function mapMovieExternalIds(tmdbData: TmdbMovieExternalIds): MovieExternalIds {
+  return {
+    id: tmdbData.id,
+    imdbId: tmdbData.imdb_id,
+    wikidataId: tmdbData.wikidata_id,
+    facebookId: tmdbData.facebook_id,
+    instagramId: tmdbData.instagram_id,
+    twitterId: tmdbData.twitter_id,
+  };
+}
+
+// Translations mapper
+interface TmdbTranslation {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  english_name: string;
+}
+
+interface TmdbMovieTranslations {
+  id: number;
+  translations: TmdbTranslation[];
+}
+
+export function mapMovieTranslations(tmdbData: TmdbMovieTranslations): MovieTranslations {
+  return {
+    id: tmdbData.id,
+    translations: tmdbData.translations.map((t) => ({
+      iso6391: t.iso_639_1,
+      iso31661: t.iso_3166_1,
+      name: t.name,
+      englishName: t.english_name,
+    })),
+  };
+}
+
+// Collection mapper
+interface TmdbCollection {
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  parts: TmdbMovieListItem[];
+}
+
+export function mapCollection(tmdbData: TmdbCollection): Collection {
+  return {
+    id: tmdbData.id,
+    name: tmdbData.name,
+    overview: tmdbData.overview,
+    posterPath: tmdbData.poster_path,
+    backdropPath: tmdbData.backdrop_path,
+    parts: tmdbData.parts.map(mapMovieListItem),
+  };
+}
+
+// TV Series mappers
+interface TmdbTvSeriesListItem {
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  first_air_date: string;
+  vote_average: number;
+  vote_count: number;
+  genre_ids: number[];
+  popularity: number;
+  original_language: string;
+  origin_country: string[];
+}
+
+export function mapTvSeriesListItem(tmdbShow: TmdbTvSeriesListItem): TvSeriesListItem {
+  return {
+    id: tmdbShow.id,
+    name: tmdbShow.name,
+    overview: tmdbShow.overview,
+    posterPath: tmdbShow.poster_path,
+    backdropPath: tmdbShow.backdrop_path,
+    firstAirDate: tmdbShow.first_air_date,
+    voteAverage: tmdbShow.vote_average,
+    voteCount: tmdbShow.vote_count,
+    genreIds: tmdbShow.genre_ids,
+    popularity: tmdbShow.popularity,
+    originalLanguage: tmdbShow.original_language,
+    originCountry: tmdbShow.origin_country,
+  };
+}
+
+interface TmdbTvSeason {
+  id: number;
+  name: string;
+  overview: string;
+  season_number: number;
+  episode_count: number;
+  air_date: string | null;
+  poster_path: string | null;
+  vote_average: number;
+}
+
+interface TmdbTvSeriesDetail {
+  id: number;
+  name: string;
+  original_name: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  first_air_date: string;
+  last_air_date: string | null;
+  vote_average: number;
+  vote_count: number;
+  status: string;
+  tagline: string;
+  genres: { id: number; name: string }[];
+  homepage: string | null;
+  number_of_seasons: number;
+  number_of_episodes: number;
+  seasons: TmdbTvSeason[];
+  networks: { id: number; name: string; logo_path: string | null }[];
+  created_by: { id: number; name: string; profile_path: string | null }[];
+  spoken_languages: { english_name: string; iso_639_1: string }[];
+  production_companies: { id: number; name: string; logo_path: string | null }[];
+}
+
+export function mapTvSeriesDetail(tmdbShow: TmdbTvSeriesDetail): TvSeriesDetail {
+  return {
+    id: tmdbShow.id,
+    name: tmdbShow.name,
+    originalName: tmdbShow.original_name,
+    overview: tmdbShow.overview,
+    posterPath: tmdbShow.poster_path,
+    backdropPath: tmdbShow.backdrop_path,
+    firstAirDate: tmdbShow.first_air_date,
+    lastAirDate: tmdbShow.last_air_date,
+    voteAverage: tmdbShow.vote_average,
+    voteCount: tmdbShow.vote_count,
+    status: tmdbShow.status,
+    tagline: tmdbShow.tagline,
+    genres: tmdbShow.genres,
+    homepage: tmdbShow.homepage,
+    numberOfSeasons: tmdbShow.number_of_seasons,
+    numberOfEpisodes: tmdbShow.number_of_episodes,
+    seasons: tmdbShow.seasons.map((s) => ({
+      id: s.id,
+      name: s.name,
+      overview: s.overview,
+      seasonNumber: s.season_number,
+      episodeCount: s.episode_count,
+      airDate: s.air_date,
+      posterPath: s.poster_path,
+      voteAverage: s.vote_average,
+    })),
+    networks: tmdbShow.networks.map((n) => ({
+      id: n.id,
+      name: n.name,
+      logoPath: n.logo_path,
+    })),
+    createdBy: tmdbShow.created_by.map((c) => ({
+      id: c.id,
+      name: c.name,
+      profilePath: c.profile_path,
+    })),
+    spokenLanguages: tmdbShow.spoken_languages.map((l) => ({
+      englishName: l.english_name,
+      iso6391: l.iso_639_1,
+    })),
+    productionCompanies: tmdbShow.production_companies.map((c) => ({
+      id: c.id,
+      name: c.name,
+      logoPath: c.logo_path,
     })),
   };
 }
